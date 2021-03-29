@@ -1,0 +1,53 @@
+class DenemeController extends GetXController{
+
+    var liste = RxList<ListeTipi>();
+    // ya da var liste = [].obs yazıyon // obs: observable den geliyo
+    
+    getir() async {
+
+        final data = await dbHelper.getList();
+        list.clear();
+        liste.addAll(data);
+        // bunun kodu da bu şekilde adAll yapmanın mantığı şuydu
+
+        liste = data; // deyince obs özelliği gidiyor. liste obs 
+        ama data değil. bu obs özelliği de değişiklikleri gözlemleyi sağlıyor
+        liste = data deyince normal liste oluyo. addALl deyince obs olan liste üzerinden işlem yapılıyor
+    }
+    ekle() {
+        liste.add(veri);
+        // bu listeye elemen eklediğin gibi arayüzde bunu kullandığın yer otomatik güncelleniyo
+    }
+
+    sil() {
+        liste.remove(veri) // keza aynı şekilde
+        // widgette kullanımı da basit
+    }
+}
+
+class DenemeSayfa extends StatelesWidget {
+    DenemeController c = DenemeController();
+    // direk returununu yazıyom
+
+    return {
+       Column(
+           children: [
+               Obx(() => Text("Liste boyutu: ${c.liste.lenght}")),
+               Button(
+                   onPressed: (){
+                       c.ekle();
+                        // otomatik üstteki text in içeriği de güncellencek
+                        // bence çok kolay bi iki video izlesen kaparsn tavbsiye ederm
+                        // setState e gerek yok yani bu şekilde 
+                        // aynen stateless tanımlıyon zaten en başta anladım 
+                        // sen bi bak takılırsan sorarsn  tamamdir araştirayim ben teşekkürler rica ederm kolay gelsn saol size de :)
+                   }
+
+               )
+           ]
+       )
+    }
+}
+
+providere göre daha kolay değil mi sence evet
+// asenkron verilerde de ayni şekilde mi 
